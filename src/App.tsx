@@ -1,8 +1,15 @@
 import { useState } from "react";
 
 function App() {
-  function handleChange(event) {
-    console.log(event.target.value);
+  const [errorMessage, setErrorMessage] = useState("hhjkhj");
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const password = event.target.value;
+
+    if (password.length >= 6 && password.length <= 32) {
+      setErrorMessage("eeeeeee");
+    } else {
+      setErrorMessage("password must 6 y 32");
+    }
   }
 
   return (
@@ -18,6 +25,7 @@ function App() {
             }}
           ></div>
         </div>
+        <p>{errorMessage}</p>
         <p>Strength of your password (out of 10) is IO</p>
       </div>
     </>
