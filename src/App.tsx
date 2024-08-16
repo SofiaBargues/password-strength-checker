@@ -103,9 +103,11 @@ function App() {
     const passwordLength = password.length;
 
     if (passwordLength >= 6 && passwordLength <= 32) {
-      // if (){
-      seguridad = seguridad + Math.floor(passwordLength / 3);
-      // }
+      if (passwordLength <= 18) {
+        seguridad = seguridad + Math.floor(passwordLength / 3);
+      } else {
+        seguridad = seguridad + 6;
+      }
       for (let i = 0; i < password.length; i++) {
         if (minusculas.includes(password[i])) {
           seguridad = seguridad + 1;
@@ -138,24 +140,23 @@ function App() {
   }
 
   return (
-    <>
-      <h1>Password Strength Checker</h1>
+    <div className="flex flex-col items-center h-screen justify-center">
+      <h1 className="font-semibold text-xl">Password Strength Checker</h1>
       <div className="card">
         <input onChange={handleChange} className="border border-1"></input>
         <div className="h-3 w-44 bg-slate-300">
           <div
             className="h-3 bg-lime-500"
             style={{
-              width: "90%",
+              width: nivelDeSeguridad + "0%",
             }}
           ></div>
         </div>
         <p>{errorMessage}</p>
-        <p>{nivelDeSeguridad}</p>
 
-        <p>Strength of your password (out of 10) is IO</p>
+        <p>Strength of your password (out of 10) is {nivelDeSeguridad}.</p>
       </div>
-    </>
+    </div>
   );
 }
 
