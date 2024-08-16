@@ -154,8 +154,11 @@ function App() {
     <div className="flex flex-col items-center h-screen justify-center gap-12">
       <h1 className="font-semibold text-5xl">Password Strength Checker</h1>
       <div className="flex flex-col  gap-6">
-        <input onChange={handleChange} className="border border-1"></input>
-        <div className="h-6  rounded-full bg-slate-300">
+        <input
+          onChange={handleChange}
+          className="border border-1 min-w-96"
+        ></input>
+        <div className="h-6 rounded-full bg-slate-300">
           <div
             className={` h-6 rounded-full ${
               quality === "weak"
