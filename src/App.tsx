@@ -91,6 +91,7 @@ const caracteresEspeciales = [
   "`",
   "~",
 ];
+const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -99,7 +100,12 @@ function App() {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const password = event.target.value;
     let seguridad = 0;
-    if (password.length >= 6 && password.length <= 32) {
+    const passwordLength = password.length;
+
+    if (passwordLength >= 6 && passwordLength <= 32) {
+      // if (){
+      seguridad = seguridad + Math.floor(passwordLength / 3);
+      // }
       for (let i = 0; i < password.length; i++) {
         if (minusculas.includes(password[i])) {
           seguridad = seguridad + 1;
@@ -114,6 +120,12 @@ function App() {
       }
       for (let i = 0; i < password.length; i++) {
         if (caracteresEspeciales.includes(password[i])) {
+          seguridad = seguridad + 1;
+          break;
+        }
+      }
+      for (let i = 0; i < password.length; i++) {
+        if (numbers.includes(password[i])) {
           seguridad = seguridad + 1;
           break;
         }
