@@ -160,7 +160,7 @@ function App() {
         ></input>
         <div className="h-6 rounded-full bg-slate-300">
           <div
-            className={` h-6 rounded-full ${
+            className={` h-6 rounded-full  transition-all duration-500 ${
               quality === "weak"
                 ? " bg-red-600"
                 : quality === "moderate"
