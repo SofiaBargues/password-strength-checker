@@ -172,10 +172,11 @@ function App() {
             }}
           ></div>
         </div>
-        <p>{errorMessage}</p>
+        <p className="h-10">{errorMessage}</p>
 
         <p>
-          Strength of your password ({nivelDeSeguridad} out of 10) is {quality}.
+          Strength of your password ({nivelDeSeguridad} out of 10) is{" "}
+          <span className="font-bold">{quality}</span>.
         </p>
       </div>
     </div>
