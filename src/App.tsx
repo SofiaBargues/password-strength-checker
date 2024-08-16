@@ -137,6 +137,8 @@ function App() {
       setErrorMessage("");
     } else {
       setErrorMessage("password must 6 y 32");
+      setNivelDeSeguridad(0);
+      setQuality("");
     }
 
     if (nivelDeSeguridad < 3 && nivelDeSeguridad <= 6) {
