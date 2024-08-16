@@ -1,11 +1,124 @@
 import { useState } from "react";
 
+const mayusculas = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];
+
+const minusculas = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+];
+const caracteresEspeciales = [
+  "!",
+  "@",
+  "#",
+  "$",
+  "%",
+  "^",
+  "&",
+  "*",
+  "(",
+  ")",
+  "-",
+  "_",
+  "=",
+  "+",
+  "[",
+  "]",
+  "{",
+  "}",
+  ";",
+  ":",
+  "'",
+  '"',
+  ",",
+  ".",
+  "/",
+  "<",
+  ">",
+  "?",
+  "|",
+  "\\",
+  "`",
+  "~",
+];
+
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
+  const [nivelDeSeguridad, setNivelDeSeguridad] = useState(0);
+
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const password = event.target.value;
-
+    let seguridad = 0;
     if (password.length >= 6 && password.length <= 32) {
+      for (let i = 0; i < password.length; i++) {
+        if (minusculas.includes(password[i])) {
+          seguridad = seguridad + 1;
+          break;
+        }
+      }
+      for (let i = 0; i < password.length; i++) {
+        if (mayusculas.includes(password[i])) {
+          seguridad = seguridad + 1;
+          break;
+        }
+      }
+      for (let i = 0; i < password.length; i++) {
+        if (caracteresEspeciales.includes(password[i])) {
+          seguridad = seguridad + 1;
+          break;
+        }
+      }
+      setNivelDeSeguridad(seguridad);
       setErrorMessage("");
     } else {
       setErrorMessage("password must 6 y 32");
@@ -26,6 +139,8 @@ function App() {
           ></div>
         </div>
         <p>{errorMessage}</p>
+        <p>{nivelDeSeguridad}</p>
+
         <p>Strength of your password (out of 10) is IO</p>
       </div>
     </>
