@@ -96,6 +96,7 @@ const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [nivelDeSeguridad, setNivelDeSeguridad] = useState(0);
+  const [quality, setQuality] = useState(0);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const password = event.target.value;
@@ -137,16 +138,24 @@ function App() {
     } else {
       setErrorMessage("password must 6 y 32");
     }
+
+    if (nivelDeSeguridad < 3 && nivelDeSeguridad <= 6) {
+      setQuality("weak");
+    } else if (nivelDeSeguridad < 6 && nivelDeSeguridad <= 8) {
+      setQuality("moderate");
+    } else if (nivelDeSeguridad > 8) {
+      setQuality("strong");
+    }
   }
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center">
-      <h1 className="font-semibold text-xl">Password Strength Checker</h1>
-      <div className="card">
+    <div className="flex flex-col items-center h-screen justify-center gap-12">
+      <h1 className="font-semibold text-5xl">Password Strength Checker</h1>
+      <div className="flex flex-col  gap-6">
         <input onChange={handleChange} className="border border-1"></input>
-        <div className="h-3 w-44 bg-slate-300">
+        <div className="h-6 w-97 rounded-full bg-slate-300">
           <div
-            className="h-3 bg-lime-500"
+            className="h-6 bg-lime-500 rounded-full"
             style={{
               width: nivelDeSeguridad + "0%",
             }}
@@ -154,7 +163,9 @@ function App() {
         </div>
         <p>{errorMessage}</p>
 
-        <p>Strength of your password (out of 10) is {nivelDeSeguridad}.</p>
+        <p>
+          Strength of your password ({nivelDeSeguridad} out of 10) is {quality}.
+        </p>
       </div>
     </div>
   );
