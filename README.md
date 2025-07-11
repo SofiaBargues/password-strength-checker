@@ -1,4 +1,4 @@
-# Password Strength Checker in React.js
+# Password Strength Checker
 
 This project involves creating a password strength checker using React.js. It displays the strength of a password (out of 10) alongside a progress bar indicating the strength level. This exercise serves as a beginner-friendly practice task for machine coding rounds.
 
