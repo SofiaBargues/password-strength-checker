@@ -1,117 +1,122 @@
 import { useState } from "react";
 
-function kindOfChar(char: string) {
-  const charCode = char.charCodeAt(0);
-  console.log(charCode);
-  if (charCode >= "0".charCodeAt(0) && charCode <= "9".charCodeAt(0))
-    return "digit";
-  else if (charCode >= "a".charCodeAt(0) && charCode <= "z".charCodeAt(0))
-    return "lowercase letter";
-  else if (charCode >= "A".charCodeAt(0) && charCode <= "Z".charCodeAt(0))
-    return "uppercase letter";
-  else return "special character";
-}
-
-function contain(inputValue: string) {
-  let length = false;
-  let uppercase = false;
-  let lowercase = false;
-  let digit = false;
-  let special = false;
-  let strengthVal = 0;
-  if (inputValue.length <= 3) {
-    strengthVal = 0;
-  } else {
-    strengthVal += 2;
-    length = true;
-    for (const char of inputValue) {
-      if (kindOfChar(char) === "digit" && digit === false) {
-        strengthVal += 2;
-        digit = true;
-      } else if (
-        kindOfChar(char) === "special character" &&
-        special === false
-      ) {
-        strengthVal += 2;
-        special = true;
-      } else if (
-        kindOfChar(char) === "lowercase letter" &&
-        lowercase === false
-      ) {
-        strengthVal += 2;
-        lowercase = true;
-      } else if (
-        kindOfChar(char) === "uppercase letter" &&
-        uppercase === false
-      ) {
-        strengthVal += 2;
-        uppercase = true;
+function contain(str: string) {
+  const result: [number, boolean, boolean, boolean, boolean] = [
+    str.length,
+    false,
+    false,
+    false,
+    false,
+  ];
+  if (str.length >= 3) {
+    for (const char of str) {
+      const charVal = char.charCodeAt(0);
+      if (charVal >= "A".charCodeAt(0) && charVal <= "Z".charCodeAt(0)) {
+        result[1] = true;
+      } else if (charVal >= "a".charCodeAt(0) && charVal <= "z".charCodeAt(0)) {
+        result[2] = true;
+      } else if (charVal >= "0".charCodeAt(0) && charVal <= "9".charCodeAt(0)) {
+        result[3] = true;
+      } else {
+        result[4] = true;
       }
     }
   }
-  return { strengthVal, length, uppercase, lowercase, digit, special };
+  return result;
+}
+
+function strength(result: [number, boolean, boolean, boolean, boolean]) {
+  let total = 0;
+  let isLongerThanThree = false;
+  if (result[0] >= 6 && !isLongerThanThree) {
+    total += 2;
+    isLongerThanThree = true;
+  }
+  if (result[1]) total += 2;
+  if (result[2]) total += 2;
+  if (result[3]) total += 2;
+  if (result[4]) total += 2;
+
+  return total;
 }
 
 function App() {
   const [inputValue, setInputValue] = useState("");
+  const containArr = contain(inputValue);
+  const totalStrength = strength(containArr);
+
   console.log(inputValue);
-  let strengthKind = "";
+  console.log(containArr);
 
-  const { strengthVal, length, uppercase, lowercase, digit, special } =
-    contain(inputValue);
-
-  if (strengthVal > 3 && strengthVal <= 6) strengthKind = "Weak";
-  else if (strengthVal > 6 && strengthVal <= 8) strengthKind = "Medium";
-  else if (strengthVal > 8) strengthKind = "Strong";
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
   return (
-    <div className="flex flex-col justify-center  items-center h-screen m-auto gap-4">
-      <h1 className="font-bold text-2xl">Password strengthVal Checker</h1>
-      <input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        className="border w-52 "
-      ></input>
-      <div>
-        <div className="bg-slate-300 w-52 h-5 rounded-full">
-          <div
-            className={
-              "h-5 rounded-full justify-start flex  " +
-              (strengthKind === "Weak"
-                ? "bg-red-600 w-12"
-                : strengthKind === "Medium"
-                ? "  bg-orange-600  w-32"
-                : strengthKind === "Strong"
-                ? "bg-green-600  w-52"
-                : "")
-            }
-          ></div>
+    <>
+      <div className="flex items-center h-screen gap-10 justify-center   flex-col">
+        <div className="font-semibold text-2xl">
+          Password strengthVal Checker
         </div>
+        <input
+          id="passwordInput"
+          type="text"
+          // type="password"
+          value={inputValue}
+          onChange={handleInputChange}
+          className="border w-52 "
+        ></input>
+        <div>
+          <div className="h-5 w-52 bg-gray-300 rounded-full">
+            {inputValue.length == 0 ? null : totalStrength <= 4 ? (
+              <div className="h-5 w-12 bg-red-300 rounded-full"></div>
+            ) : totalStrength <= 8 ? (
+              <div className="h-5 w-36 bg-orange-300 rounded-full"></div>
+            ) : (
+              <div className="h-5 w-52 bg-green-300 rounded-full"></div>
+            )}
+          </div>
+        </div>
+        <ul className="list-disc h-36">
+          {containArr[0] < 6 ? (
+            <li>
+              <div>Password must 6 y 32 characters.</div>
+            </li>
+          ) : (
+            ""
+          )}
+          {!containArr[1] ? (
+            <li>
+              <div>Password must have at least 1 uppercase.</div>
+            </li>
+          ) : (
+            ""
+          )}
+          {!containArr[2] ? (
+            <li>
+              <div>Password must have at least 1 lowercase.</div>
+            </li>
+          ) : (
+            ""
+          )}
+          {!containArr[3] ? (
+            <li>
+              <div>Password must have at least 1 digit.</div>
+            </li>
+          ) : (
+            ""
+          )}
+          {!containArr[4] ? (
+            <li>
+              <div>Password must have at least 1 special character.</div>
+            </li>
+          ) : (
+            ""
+          )}
+        </ul>
+        <div>Srength of your password is ({totalStrength} out of 10)</div>
       </div>
-
-      <div className="text-xs">
-        {!length ? <li>Password must 6 y 32 characters.</li> : ""}
-        {length && !uppercase ? (
-          <li>Password must have at least 1 uppercase.</li>
-        ) : (
-          ""
-        )}
-        {length && !lowercase ? (
-          <li>Password must have at least 1 lowercase.</li>
-        ) : (
-          ""
-        )}
-        {length && !digit ? <li>Password must have at least 1 digit.</li> : ""}
-        {length && !special ? (
-          <li>Password must have at least 1 special character.</li>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="text-xs">
-        Srength of your password ({strengthVal} out of 10) is .
-      </div>
-    </div>
+    </>
   );
 }
 
