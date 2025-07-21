@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-function contain(str: string) {
-  const containObj = {
+function result(str: string) {
+  const result = {
     length: false,
     upper: false,
     lower: false,
@@ -9,24 +9,22 @@ function contain(str: string) {
     special: false,
   };
 
-  if (str.length >= 6) containObj.length = true;
+  if (str.length >= 6) result.length = true;
 
   for (const char of str) {
-    const charVal = char.charCodeAt(0);
-    if (charVal >= "A".charCodeAt(0) && charVal <= "Z".charCodeAt(0)) {
-      containObj["upper"] = true;
-    } else if (charVal >= "a".charCodeAt(0) && charVal <= "z".charCodeAt(0)) {
-      containObj["lower"] = true;
-    } else if (charVal >= "0".charCodeAt(0) && charVal <= "9".charCodeAt(0)) {
-      containObj["digit"] = true;
-    } else {
-      containObj["special"] = true;
-    }
+    const num = char.charCodeAt(0);
+    if (num >= "A".charCodeAt(0) && num <= "Z".charCodeAt(0))
+      result.upper = true;
+    else if (num >= "a".charCodeAt(0) && num <= "z".charCodeAt(0))
+      result.lower = true;
+    else if (num >= "0".charCodeAt(0) && num <= "9".charCodeAt(0))
+      result.digit = true;
+    else result.special = true;
   }
-  return containObj;
+  return result;
 }
 
-function strength(obj: {
+function strength(result: {
   length: boolean;
   upper: boolean;
   lower: boolean;
@@ -34,58 +32,56 @@ function strength(obj: {
   special: boolean;
 }) {
   let total = 0;
-  if (obj.length) total += 2;
-  if (obj.upper) total += 2;
-  if (obj.lower) total += 2;
-  if (obj.digit) total += 2;
-  if (obj.special) total += 2;
+  if (result.length) total += 2;
+  if (result.upper) total += 2;
+  if (result.lower) total += 2;
+  if (result.digit) total += 2;
+  if (result.special) total += 2;
 
   return total;
 }
 
 function App() {
   const [inputVal, setInputVal] = useState("");
-  const result = contain(inputVal);
+  const contain = result(inputVal);
+  const strengthTotal = strength(contain);
 
-  const strengthLevel = strength(result);
-  console.log(strength(result));
   console.log(inputVal);
-  console.log(result);
   return (
-    <div className="flex flex-col justify-center  items-center h-screen m-auto gap-4">
-      <h1 className="font-bold text-2xl">Password strengthVal Checker</h1>
-      <input
-        type="text"
-        value={inputVal}
-        onChange={(e) => setInputVal(e.target.value)}
-        className="border w-52"
-      ></input>
-      <div>
+    <div className="flex flex-col h-screen justify-center items-center gap-6">
+      <>
+        <h1>Password strengthVal Checker</h1>
+        <input
+          className="border"
+          type="text"
+          value={inputVal}
+          onChange={(e) => setInputVal(e.target.value)}
+        ></input>
         <div className="bg-slate-300 w-52 h-5 rounded-full">
-          {strengthLevel <= 4 ? (
-            <div className="bg-red-300 w-12 h-5 rounded-full"> </div>
-          ) : strengthLevel > 4 && strengthLevel <= 8 ? (
-            <div className="bg-orange-300 w-24 h-5 rounded-full"> </div>
+          {strengthTotal <= 4 && inputVal.length != 0 ? (
+            <div className="bg-red-300 w-12 h-5 rounded-full"></div>
+          ) : strengthTotal <= 8 && inputVal.length != 0 ? (
+            <div className="bg-orange-300 w-40 h-5 rounded-full"></div>
+          ) : strengthTotal > 8 && inputVal.length != 0 ? (
+            <div className="bg-green-300 w-52 h-5 rounded-full"></div>
           ) : (
-            <div className="bg-green-300 w-52 h-5 rounded-full"> </div>
+            ""
           )}
         </div>
-      </div>
-
-      <ul className="text-xs h-16">
-        {result.length ? "" : <li>Password must 6 y 32 characters.</li>}
-        {result.upper ? "" : <li>Password must have at least 1 uppercase.</li>}
-        {result.lower ? "" : <li>Password must have at least 1 lowercase.</li>}
-        {result.digit ? "" : <li>Password must have at least 1 digit.</li>}
-        {result.special ? (
+      </>
+      <ul className=" h-44">
+        {contain.length ? "" : <li>Password must 6 y 32 characters.</li>}
+        {contain.upper ? "" : <li>Password must have at least 1 uppercase.</li>}
+        {contain.lower ? "" : <li>Password must have at least 1 lowercase.</li>}
+        {contain.digit ? "" : <li>Password must have at least 1 digit.</li>}
+        {contain.special ? (
           ""
         ) : (
           <li>Password must have at least 1 special character.</li>
         )}
+
+        <div>Strength of your password is {strengthTotal} out of 10.</div>
       </ul>
-      <div className="text-xs">
-        Srength of your password is {strengthLevel} out of 10.
-      </div>
     </div>
   );
 }
